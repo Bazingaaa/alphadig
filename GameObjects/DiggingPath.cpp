@@ -6,7 +6,6 @@
 #include "GameObjects/Tiles/SoilTile.h"
 #include "GameObjects/Tiles/BlockTile.h"
 #include "GameObjects/Tiles/GoldTile.h"
-#include "GameObjects/Tiles/HealTile.h"
 #include "GameObjects/Tiles/SpawnDiggerTile.h"
 #include "GameObjects/DiggingWorld.h"
 #include "Script/LuaHelper.h"
@@ -101,7 +100,7 @@ void DiggingPath::update( float fElapsedTime )
 		pTopTile->extrude( fHeightDiff );
 
 	//see if the digger is out of range
-	if( m_pDigger->getHeight() < DiggingWorld::sharedDiggingWorld()->getCurrentTopHeight() )
+	if( m_pDigger->isBrokenup() )
 	{
 		m_bPathClosed = true;
 	}
@@ -158,6 +157,18 @@ float DiggingPath::getGroundHeight( ) const
 	return pTile->getTopHeight();
 }
 
+float DiggingPath::getTopBlockHeight() const
+{
+	TileList::const_iterator iter = m_soilTiles.begin();
+	for( ; iter != m_soilTiles.end(); ++iter )
+	{
+		if( ( *iter )->getTileType() == "BLOCK" )
+			return (*iter)->getTopHeight();
+	}
+
+	return m_soilTiles.back()->getTopHeight();
+}
+
 void DiggingPath::notifyRemoveTile( SoilTile *pTile )
 {
 	if( std::find( m_tilesToBeRemoved.begin(), m_tilesToBeRemoved.end(), pTile ) != m_tilesToBeRemoved.end() )
@@ -170,10 +181,7 @@ void DiggingPath::respawnDigger()
 {
 	if( !m_pDigger->isBrokenup() )
 		return;
-
-	m_pDigger->setDurability( 100 );
 	m_pDigger->setMomentum( 200.0f );
-	m_pDigger->setInvincibleTime( 2.0f );
 }
 
 void DiggingPath::_removeTile( SoilTile *pTile )
@@ -199,8 +207,6 @@ SoilTile* DiggingPath::_createTile( bool bCreateInDigging, unsigned int nRow )
 			pRetTile = new BlockTile( this, m_nPathColumn, nRow );
 		else if( strNewTileTypeName == "GOLD" )
 			pRetTile = new GoldTile( this, m_nPathColumn, nRow );
-		else if( strNewTileTypeName == "HEAL" )
-			pRetTile = new HealTile( this, m_nPathColumn, nRow );
 		else if( strNewTileTypeName == "SPAWN_DIGGER" )
 			pRetTile = new SpawnDiggerTile( this, m_nPathColumn, nRow );
 		else

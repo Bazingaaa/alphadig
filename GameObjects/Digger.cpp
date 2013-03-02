@@ -13,6 +13,8 @@
 #include "actions/CCAction.h"
 #include "actions/CCActionInterval.h"
 
+#include <algorithm>
+
 
 
 namespace AlphaDig
@@ -31,17 +33,11 @@ Digger::Digger( DiggingPath *pHostPath )
 , m_fDynFriction( 0.0f )
 , m_pDiggerSprite( NULL )
 , m_touchRect( )
-, m_fDurability( 100.0f )
-, m_fInvincibleTime( 2.0f )
-, m_fInvincibleTimeCount( 0.0f )
-, m_bInvincibleFlash( false )
-, m_pInvincibleFlash( NULL )
 {
 }
 
 Digger::~Digger()
 {
-	CC_SAFE_RELEASE_NULL( m_pInvincibleFlash );
 }
 
 void Digger::create()
@@ -71,12 +67,6 @@ void Digger::create()
 	m_pDiggerSprite->setPosition( ccp( fDiggerSpriteX, fDiggerSpriteY ) );
 
 	m_fDynFriction = m_fMiu * m_fMassive * s_fGravityAcc;
-
-	//invincible flash obj
-	CCActionInterval* pTintYellow = CCTintBy::create(0.5f, 0, 0, -255);
-	CCActionInterval* pTintYellowBack = pTintYellow->reverse();
-	m_pInvincibleFlash = CCRepeatForever::create( (CCActionInterval*)(CCSequence::create( pTintYellow, pTintYellowBack, NULL)) );
-	m_pInvincibleFlash->retain();
 }
 
 void Digger::dig( float fForce )
@@ -89,8 +79,6 @@ void Digger::update( float fElapsedTime )
 	//do nothing if it is broken up
 	if( isBrokenup() )
 		return;
-
-	_updateInvincible( fElapsedTime );
 
 
 	float fReactionForce = 0.0f; //反作用力
@@ -113,9 +101,10 @@ void Digger::update( float fElapsedTime )
 	// do height clamp
 	DiggingWorld *pDiggingWorld = DiggingWorld::sharedDiggingWorld();
 	float fBottomHeight = pDiggingWorld->getCurrentBottomHeight();
-	if( m_fHeight > fBottomHeight )
+	float fClampedHeight = std::min( fBottomHeight, m_pHostPath->getTopBlockHeight() );
+	if( m_fHeight > fClampedHeight )
 	{
-		m_fHeight = fBottomHeight;
+		m_fHeight = fClampedHeight;
 		m_fMomentum = 0.0f;
 	}
 
@@ -154,42 +143,7 @@ bool Digger::isTouched( CCTouch *pTouch )
 
 bool Digger::isBrokenup() const
 {
-	if( _isInvincible() )
-		return false;
-
-	return m_fDurability <= 0.0f ||
-		   m_fHeight < DiggingWorld::sharedDiggingWorld()->getCurrentTopHeight();
-}
-
-void Digger::modifyDurability( float fChangeValue )
-{
-	if( fChangeValue < 0.0f && _isInvincible() )
-		return;
-
-	m_fDurability -= fChangeValue;
-}
-
-void Digger::_updateInvincible( float fElapsedTime )
-{
-	//update invincible time count
-	if( _isInvincible() )
-	{
-		m_fInvincibleTimeCount += fElapsedTime;
-		if( !m_bInvincibleFlash )
-		{
-			m_pDiggerSprite->runAction( m_pInvincibleFlash );
-			m_bInvincibleFlash = true;
-		}
-	}
-	else
-	{
-		if( m_bInvincibleFlash )
-		{
-			m_pDiggerSprite->stopAction( m_pInvincibleFlash );
-			m_pDiggerSprite->setColor( ccc3( 255, 255, 255 ) );
-			m_bInvincibleFlash = false;
-		}
-	}
+	return m_fHeight < DiggingWorld::sharedDiggingWorld()->getCurrentTopHeight() - 1.0f;
 }
 
 }

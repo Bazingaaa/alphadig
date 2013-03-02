@@ -14,13 +14,19 @@ public:
 	~SpawnDiggerTile();
 
 	///<override
-	virtual void extrude( float fHeightExtruded );
+	virtual void create( );
+	virtual void destroy();
 	virtual bool isTouched( CCTouch *pTouch );
 	virtual void touched();
 
 protected:
 	///<override
 	virtual const char* _getTileRectName() const;
+	virtual void _extrudeImage( float fHeightExtruded );
+
+protected:
+
+	CCSprite *m_pSpriteSpawnDigger;
 
 };
 

@@ -53,25 +53,12 @@ public:
 	///<set the momentum
 	void setMomentum( float fMomentum ) { m_fMomentum = fMomentum; }
 
-	///<modify/get the durability
-	void modifyDurability( float fChangeValue );
-	void setDurability( float fValue ) { m_fDurability = fValue; }
-
 	bool isBrokenup() const;
-
-	///<set the invincible time
-	void setInvincibleTime( float fInvincibleTime ) { m_fInvincibleTime = fInvincibleTime; m_fInvincibleTimeCount = 0.0f; }
 
 public:
 	///<重力加速度
 	static const float s_fGravityAcc;
 
-protected:
-
-	///<get if the digger is invincible
-	bool _isInvincible() const { return m_fInvincibleTimeCount < m_fInvincibleTime; }
-
-	void _updateInvincible( float fElapsedTime );
 
 protected:
 	///<这个挖掘机所在的挖掘道
@@ -103,17 +90,6 @@ protected:
 
 	///<the touch rect of this digger
 	CCRect m_touchRect;
-
-	///<durability
-	float m_fDurability;
-
-	///<the invincible time
-	float m_fInvincibleTime;
-	float m_fInvincibleTimeCount;
-	bool m_bInvincibleFlash;
-
-	///< the invincible flash action
-	CCAction *m_pInvincibleFlash;
 
 
 };

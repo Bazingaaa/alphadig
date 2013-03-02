@@ -44,6 +44,8 @@ public:
 
 	///<get tht ground height ,ie. the top tile's height
 	float getGroundHeight() const;
+	///<get the top block height
+	float getTopBlockHeight() const;
 
 	///<get the column of this path
 	unsigned int getPathColumn( ) const { return m_nPathColumn; }

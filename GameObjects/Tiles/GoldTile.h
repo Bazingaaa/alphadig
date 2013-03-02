@@ -16,18 +16,22 @@ public:
 	~GoldTile();
 
 	///<override
-	virtual void extrude( float fHeightExtruded );
+	virtual void create();
+	virtual void destroy();
 	virtual bool isTouched( CCTouch *pTouch );
 	virtual void touched();
 
 protected:
 	///<override
 	virtual const char* _getTileRectName() const;
+	virtual void _extrudeImage( float fHeightExtruded );
 
 protected:
 
 	///<the gold count of this tile
 	unsigned int m_nGoldCount;
+
+	CCSprite *m_pSpriteGold;
 };
 
 

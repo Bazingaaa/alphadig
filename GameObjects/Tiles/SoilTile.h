@@ -3,6 +3,7 @@
 #ifndef SOIL_TILE_H__
 #define SOIL_TILE_H__
 
+#include <string>
 #include "cocoa/CCObject.h"
 
 namespace cocos2d
@@ -28,11 +29,14 @@ public:
 	~SoilTile();
 
 	///< create/ destroy methods
-	void create();
-	void destroy();
+	virtual void create();
+	virtual void destroy();
+
+	///< get tile type
+	const std::string& getTileType()const { return m_strTileType; }
 
 	///<extrude tile
-	virtual void extrude( float fHeightExtruded );
+	void extrude( float fHeightExtruded );
 
 	///touches callback
 	virtual bool isTouched( CCTouch *pTouch ){ return false; }
@@ -43,25 +47,35 @@ public:
 
 protected:
 
+	///<create a tile with a rect name
+	CCSprite* _createTileSprite( const char *pRectName );
+
 	///< get the tile image rect define name in script
 	virtual const char* _getTileRectName() const ;
 
-	void _extrudeImage( float fHeightExtruded );
+	///<extrude image when digger dig into this tile
+	virtual void _extrudeImage( float fHeightExtruded );
+	void _extrudeImageImp( float fHeightExtruded, const char *pImageRectName, CCSprite *pSprite );
 
 	bool _isTouchedSprite( CCTouch *pTouch );
 
 protected:
 
+	///<the type of this tile
+	std::string m_strTileType;
+
 	unsigned int m_nColumn;
 
 	///< the CCSprite obj of the tile
-	CCSprite *m_pTileSprite;
+	CCSprite *m_pSpriteSoil;
 
 	///<the initial sprite posY
 	float m_fInitPosY;
 
 	///<the host digging path
 	DiggingPath *m_pHostPath;
+
+
 
 	///<the tile height property
 	CC_SYNTHESIZE_READONLY( unsigned int, m_nHeight, Height );

@@ -5,8 +5,10 @@
 #include "GameObjects/Digger.h"
 #include "GameObjects/DiggingPath.h"
 #include "Script/LuaHelper.h"
+#include "Layers/LayerGaming.h"
 
 #include "touch_dispatcher/CCTouch.h"
+#include "sprite_nodes/CCSpriteBatchNode.h"
 #include "sprite_nodes/CCSprite.h"
 
 namespace AlphaDig
@@ -14,9 +16,10 @@ namespace AlphaDig
 
 BlockTile::BlockTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned nHeight )
 : SoilTile( pHostPath, nColumn, nHeight )
-, m_fDamage( 0.0f )
+//, FiniteStateMachine( )
+, m_pSpriteBlock( NULL )
 {
-	m_fDamage = LuaHelper::s_getNumberVar( "DAMAGE_BLOCK_TILE" );
+	m_strTileType = "BLOCK";
 }
 
 BlockTile::~BlockTile()
@@ -24,16 +27,26 @@ BlockTile::~BlockTile()
 
 }
 
-void BlockTile::extrude( float fHeightExtruded )
+void BlockTile::create( )
 {
-	if( fHeightExtruded > 0.2f )
-	{
-		Digger *pDigger = m_pHostPath->getDigger();
-		pDigger->modifyDurability( -m_fDamage );
-		m_pHostPath->notifyRemoveTile( this );
-	}
-	else
-		_extrudeImage( fHeightExtruded );
+	SoilTile::create();
+
+	m_pSpriteBlock = _createTileSprite( _getTileRectName() );
+	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
+	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+	pMainBatchNode->reorderChild( m_pSpriteBlock, m_pSpriteSoil->getZOrder() + 1 );
+}
+
+void BlockTile::destroy()
+{
+	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
+	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+
+	pMainBatchNode->removeChild( m_pSpriteBlock, true );
+
+	m_pSpriteBlock = NULL;
+
+	SoilTile::destroy();
 }
 
 bool BlockTile::isTouched( CCTouch *pTouch )
@@ -50,6 +63,21 @@ const char* BlockTile::_getTileRectName() const
 {
 	return "RECT_BLOCK_TILE";
 }
+
+void BlockTile::_extrudeImage( float fHeightExtruded )
+{
+	SoilTile::_extrudeImage( fHeightExtruded );
+
+	_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteBlock );
+}
+
+/*void BlockTile::_processInputEvent( int nEventID )
+{
+	if( nEventID == E_BE_DEGENERATE )
+	{
+		m_nState -= 1;
+	}
+}*/
 
 
 }
