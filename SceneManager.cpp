@@ -3,6 +3,7 @@
 #include "Layers/LayerMainMenu.h"
 #include "Layers/LayerGaming.h"
 #include "Layers/LayerGameOver.h"
+#include "Layers/LayerOption.h"
 
 
 #include "layers_scenes_transitions_nodes/CCScene.h"
