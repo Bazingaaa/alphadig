@@ -10,6 +10,18 @@ namespace AlphaDig
 class SpawnDiggerTile : public SoilTile
 {
 public:
+
+	enum SpawnDiggerEvent
+	{
+		E_SDE_DEGENERATE,
+	};
+
+	enum SpawnDiggerState
+	{
+		E_SDS_SOIL,
+		E_SDS_NORMAL,
+	};
+
 	SpawnDiggerTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned int nHeight );
 	~SpawnDiggerTile();
 
@@ -23,6 +35,11 @@ protected:
 	///<override
 	virtual const char* _getTileRectName() const;
 	virtual void _extrudeImage( float fHeightExtruded );
+
+	///<override
+	virtual void _processInputEvent( int nEventID );
+	virtual void _leaveCurrState( );
+	virtual void _enterNewState( );
 
 protected:
 

@@ -54,7 +54,7 @@ void DiggingWorld::update( float fElapsedTime )
 	m_fCurrentBottomHeight = fBatchNodePosY / m_fTileSize + m_fTileCountPerColumn;
 
 	bool bGameOver = true;
-	for( DiggingPathList::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
+	for( DiggingPathVector::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
 	{
 		(*iter)->update( fElapsedTime );
 
@@ -82,7 +82,7 @@ void DiggingWorld::_createOneDiggingPath()
 
 void DiggingWorld::clearWorld()
 {
-	for( DiggingPathList::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
+	for( DiggingPathVector::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
 	{
 		CC_SAFE_RELEASE_NULL( *iter );
 	}
@@ -92,7 +92,7 @@ void DiggingWorld::clearWorld()
 
 void DiggingWorld::touchesBegan( CCSet *pTouches, CCEvent *pEvent )
 {
-	for( DiggingPathList::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
+	for( DiggingPathVector::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
 	{
 		(*iter)->touchesBegan( pTouches, pEvent );
 	}
@@ -100,7 +100,7 @@ void DiggingWorld::touchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 void DiggingWorld::touchesMoved( CCSet *pTouches, CCEvent *pEvent )
 {
-	for( DiggingPathList::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
+	for( DiggingPathVector::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
 	{
 		(*iter)->touchesMoved( pTouches, pEvent );
 	}
@@ -115,20 +115,14 @@ void DiggingWorld::convertToGLCoordinate( float fRow, float fColumn, float &fOut
 	fOutY = m_fTileSize * fConvertedRow + m_fTileSize * 0.5f;
 }
 
-void DiggingWorld::resetOneClosedPath()
+void DiggingWorld::resetOneClosedPath( unsigned int nColumn )
 {
-	std::vector< DiggingPath* > closedPaths;
-	for( DiggingPathList::iterator iter = m_diggingPaths.begin(); iter != m_diggingPaths.end(); ++iter )
-	{
-		if( (*iter)->isPathClosed() )
-			closedPaths.push_back( *iter );
-	}
-
-	if( closedPaths.empty() )
+	if( m_diggingPaths.size() <= nColumn )
 		return;
 
-	std::size_t closedPathsNum = closedPaths.size();
-	DiggingPath *pDiggingPath = closedPaths[ rand() % closedPathsNum ];
+	DiggingPath *pDiggingPath = m_diggingPaths[ nColumn ];
+	if( !pDiggingPath->isPathClosed() )
+		return;
 
 	pDiggingPath->respawnDigger();
 }

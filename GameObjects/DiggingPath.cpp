@@ -162,8 +162,9 @@ float DiggingPath::getTopBlockHeight() const
 	TileList::const_iterator iter = m_soilTiles.begin();
 	for( ; iter != m_soilTiles.end(); ++iter )
 	{
-		if( ( *iter )->getTileType() == "BLOCK" )
-			return (*iter)->getTopHeight();
+		SoilTile *pTile = *iter;
+		if( pTile->getTileType() == "BLOCK" && pTile->getCurrState() != BlockTile::E_BS_SOIL )
+			return pTile->getTopHeight();
 	}
 
 	return m_soilTiles.back()->getTopHeight();
@@ -203,8 +204,8 @@ SoilTile* DiggingPath::_createTile( bool bCreateInDigging, unsigned int nRow )
 		std::string strNewTileTypeName = lua_tostring( pLuaState, -1 );
 		lua_pop( pLuaState, 1 );
 
-		if( strNewTileTypeName == "BLOCK" )
-			pRetTile = new BlockTile( this, m_nPathColumn, nRow );
+		if( strNewTileTypeName == "BLOCK_LVL_1" )
+			pRetTile = new BlockTile( this, m_nPathColumn, nRow, BlockTile::E_BS_BLOCK_LVL_1 );
 		else if( strNewTileTypeName == "GOLD" )
 			pRetTile = new GoldTile( this, m_nPathColumn, nRow );
 		else if( strNewTileTypeName == "SPAWN_DIGGER" )

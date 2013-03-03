@@ -19,6 +19,7 @@ GoldTile::GoldTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned nHeig
 , m_pSpriteGold( NULL )
 {
 	m_strTileType = "GOLD";
+	m_nCurrentState = E_GS_GOLD;
 }
 
 GoldTile::~GoldTile()
@@ -55,10 +56,6 @@ bool GoldTile::isTouched( CCTouch *pTouch )
 
 void GoldTile::touched()
 {
-	Digger *pDigger = m_pHostPath->getDigger();
-	m_pHostPath->notifyRemoveTile( this );
-	StatisticsManager::getSingleton().addStatisticsByName( "gold_obtained", m_nGoldCount );
-	LayerGaming::sharedLayerGaming()->updateGoldHUD();
 }
 
 const char* GoldTile::_getTileRectName() const
@@ -70,7 +67,29 @@ void GoldTile::_extrudeImage( float fHeightExtruded )
 {
 	SoilTile::_extrudeImage( fHeightExtruded );
 
-	_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteGold );
+	if( m_nCurrentState == E_GS_GOLD )
+		_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteGold );
+
+	if( fHeightExtruded > 0.1f )
+		input( E_GE_DEGENERATE );
+}
+
+void GoldTile::_processInputEvent( int nEventID )
+{
+	if( nEventID == E_GE_DEGENERATE )
+		_changeState( E_GS_SOIL );
+}
+
+void GoldTile::_leaveCurrState()
+{
+	_destroySprite( m_pSpriteGold );
+	m_pSpriteGold = NULL;
+}
+
+void GoldTile::_enterNewState()
+{
+	StatisticsManager::getSingleton().addStatisticsByName( "gold_obtained", m_nGoldCount );
+	LayerGaming::sharedLayerGaming()->updateGoldHUD();
 }
 
 

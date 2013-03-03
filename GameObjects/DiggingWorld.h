@@ -4,7 +4,7 @@
 
 #include "cocoa/CCObject.h"
 
-#include <list>
+#include <vector>
 
 namespace cocos2d
 {
@@ -57,7 +57,7 @@ public:
 	float getCurrentTopHeight() const { return m_fCurrentBottomHeight - m_fTileCountPerColumn; }
 
 	///<reset one closed path
-	void resetOneClosedPath();
+	void resetOneClosedPath( unsigned int nColumn );
 
 protected:
 
@@ -65,8 +65,8 @@ protected:
 
 protected:
 
-	typedef std::list< DiggingPath* > DiggingPathList;
-	DiggingPathList m_diggingPaths;
+	typedef std::vector< DiggingPath* > DiggingPathVector;
+	DiggingPathVector m_diggingPaths;
 
 	const unsigned int m_nMaxPathCount; ///< the max path count
 	float m_fTileSize; ///<size per soil tile , cal by window size

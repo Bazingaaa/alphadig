@@ -98,6 +98,13 @@ void Digger::update( float fElapsedTime )
 	if( m_fMomentum < 0.0f )
 		m_fMomentum = 0.0f;
 
+	//计算速度
+	m_fVelocity = m_fMomentum / m_fMassive;
+	//计算高度
+	m_fHeight += fElapsedTime * m_fVelocity;
+
+	m_fMomentum = 0.0f;
+
 	// do height clamp
 	DiggingWorld *pDiggingWorld = DiggingWorld::sharedDiggingWorld();
 	float fBottomHeight = pDiggingWorld->getCurrentBottomHeight();
@@ -105,16 +112,8 @@ void Digger::update( float fElapsedTime )
 	if( m_fHeight > fClampedHeight )
 	{
 		m_fHeight = fClampedHeight;
-		m_fMomentum = 0.0f;
+		m_fVelocity = 0.0f;
 	}
-
-	//计算速度
-	m_fVelocity = m_fMomentum / m_fMassive;
-
-	//计算高度
-	m_fHeight += fElapsedTime * m_fVelocity;
-
-	m_fMomentum = 0.0f;
 
 	//set the sprite height
 	float fDiggerSpriteX = 0.0f;
@@ -143,7 +142,8 @@ bool Digger::isTouched( CCTouch *pTouch )
 
 bool Digger::isBrokenup() const
 {
-	return m_fHeight < DiggingWorld::sharedDiggingWorld()->getCurrentTopHeight() - 1.0f;
+	return ( m_fHeight < DiggingWorld::sharedDiggingWorld()->getCurrentTopHeight() - 1.0f ) &&
+		   ( m_fMomentum == 0.0f );
 }
 
 }

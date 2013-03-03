@@ -14,12 +14,13 @@
 namespace AlphaDig
 {
 
-BlockTile::BlockTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned nHeight )
+BlockTile::BlockTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned nHeight, BlockState eBlockState )
 : SoilTile( pHostPath, nColumn, nHeight )
-//, FiniteStateMachine( )
 , m_pSpriteBlock( NULL )
 {
 	m_strTileType = "BLOCK";
+
+	m_nCurrentState = eBlockState;
 }
 
 BlockTile::~BlockTile()
@@ -39,11 +40,8 @@ void BlockTile::create( )
 
 void BlockTile::destroy()
 {
-	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
 
-	pMainBatchNode->removeChild( m_pSpriteBlock, true );
-
+	_destroySprite( m_pSpriteBlock );
 	m_pSpriteBlock = NULL;
 
 	SoilTile::destroy();
@@ -56,28 +54,48 @@ bool BlockTile::isTouched( CCTouch *pTouch )
 
 void BlockTile::touched()
 {
-	m_pHostPath->notifyRemoveTile( this );
+	input( E_BE_DEGENERATE );
 }
 
 const char* BlockTile::_getTileRectName() const
 {
-	return "RECT_BLOCK_TILE";
+	if( m_nCurrentState ==  E_BS_BLOCK_LVL_1 )
+		return "RECT_TILE_BLOCK_LVL_1";
+	else if( m_nCurrentState == E_BS_BLOCK_LVL_2 )
+		return "RECT_TILE_BLOCK_LVL_2";
+	else
+		return "RECT_TILE_BLOCK_LVL_3";
 }
 
 void BlockTile::_extrudeImage( float fHeightExtruded )
 {
 	SoilTile::_extrudeImage( fHeightExtruded );
 
-	_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteBlock );
+	if( m_nCurrentState != E_BS_SOIL )
+		_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteBlock );
 }
 
-/*void BlockTile::_processInputEvent( int nEventID )
+
+void BlockTile::_processInputEvent( int nEventID )
 {
 	if( nEventID == E_BE_DEGENERATE )
 	{
-		m_nState -= 1;
+		if( m_nCurrentState > E_BS_SOIL )
+			_changeState( m_nCurrentState - 1 );
 	}
-}*/
+}
+
+void BlockTile::_leaveCurrState()
+{
+	_destroySprite( m_pSpriteBlock );
+	m_pSpriteBlock = NULL;
+}
+
+void BlockTile::_enterNewState()
+{
+	if( m_nCurrentState != E_BS_SOIL )
+		_createTileSprite( _getTileRectName() );
+}
 
 
 }

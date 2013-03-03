@@ -4,12 +4,12 @@
 
 
 #include "GameObjects/Tiles/SoilTile.h"
-//#include "Utilities/FiniteStateMachine.h"
+
 
 namespace AlphaDig
 {
 
-class BlockTile : public SoilTile//, FiniteStateMachine
+class BlockTile : public SoilTile
 {
 public:
 
@@ -26,7 +26,7 @@ public:
 		E_BS_BLOCK_LVL_3
 	};
 
-	BlockTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned int nHeight );
+	BlockTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned int nHeight, BlockState eBlockState );
 	~BlockTile();
 
 	///<override
@@ -37,14 +37,14 @@ public:
 
 protected:
 
-	///<override from SoilTile
+	///<override
 	virtual const char* _getTileRectName() const ;
 	virtual void _extrudeImage( float fHeightExtruded );
 
-	/*//<override from FiniteStateMachine
+	///<override
 	virtual void _processInputEvent( int nEventID );
 	virtual void _leaveCurrState( );
-	virtual void _enterNewState( );*/
+	virtual void _enterNewState( );
 
 
 protected:

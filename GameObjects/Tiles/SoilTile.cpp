@@ -13,7 +13,8 @@ namespace AlphaDig
 {
 
 SoilTile::SoilTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned int nHeight )
-: m_strTileType( "SOIL" )
+: FiniteStateMachine( 0 )
+, m_strTileType( "SOIL" )
 , m_nColumn( nColumn )
 , m_nHeight( nHeight )
 , m_pSpriteSoil( NULL )
@@ -35,10 +36,7 @@ void SoilTile::create()
 
 void SoilTile::destroy()
 {
-	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
-
-	pMainBatchNode->removeChild( m_pSpriteSoil, true );
+	_destroySprite( m_pSpriteSoil );
 
 	m_pSpriteSoil = NULL;
 }
@@ -125,6 +123,14 @@ CCSprite* SoilTile::_createTileSprite( const char* pRectName )
 	m_fInitPosY = fSoilSpriteY;
 
 	return pRetSprite;
+}
+
+void SoilTile::_destroySprite( CCSprite *pSprite )
+{
+	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
+	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+
+	pMainBatchNode->removeChild( pSprite, true );
 }
 
 }

@@ -17,6 +17,7 @@ SpawnDiggerTile::SpawnDiggerTile( DiggingPath *pHostPath, unsigned int nColumn, 
 , m_pSpriteSpawnDigger( NULL )
 {
 	m_strTileType = "SPAWN_DIGGER";
+	m_nCurrentState = E_SDS_NORMAL;
 }
 
 SpawnDiggerTile::~SpawnDiggerTile()
@@ -54,8 +55,7 @@ bool SpawnDiggerTile::isTouched( CCTouch *pTouch )
 
 void SpawnDiggerTile::touched()
 {
-	DiggingWorld::sharedDiggingWorld()->resetOneClosedPath();
-	m_pHostPath->notifyRemoveTile( this );
+	input( E_SDE_DEGENERATE );
 }
 
 const char* SpawnDiggerTile::_getTileRectName() const
@@ -67,7 +67,25 @@ void SpawnDiggerTile::_extrudeImage( float fHeightExtruded )
 {
 	SoilTile::_extrudeImage( fHeightExtruded );
 
-	_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteSpawnDigger );
+	if( m_nCurrentState == E_SDS_NORMAL )
+		_extrudeImageImp( fHeightExtruded, _getTileRectName(), m_pSpriteSpawnDigger );
+}
+
+void SpawnDiggerTile::_processInputEvent( int nEventID )
+{
+	if( nEventID == E_SDE_DEGENERATE )
+		_changeState( E_SDS_SOIL );
+}
+
+void SpawnDiggerTile::_leaveCurrState()
+{
+	_destroySprite( m_pSpriteSpawnDigger );
+	m_pSpriteSpawnDigger = NULL;
+}
+
+void SpawnDiggerTile::_enterNewState()
+{
+	DiggingWorld::sharedDiggingWorld()->resetOneClosedPath( m_nColumn );
 }
 
 }

@@ -3,6 +3,8 @@
 #ifndef SOIL_TILE_H__
 #define SOIL_TILE_H__
 
+#include "Utilities/FiniteStateMachine.h"
+
 #include <string>
 #include "cocoa/CCObject.h"
 
@@ -22,7 +24,7 @@ class DiggingPath;
 /**
  * 土方
  */
-class SoilTile : public CCObject
+class SoilTile : public CCObject, public FiniteStateMachine
 {
 public:
 	SoilTile( DiggingPath *pHostPath, unsigned int nColumn, unsigned int nHeight );
@@ -50,6 +52,9 @@ protected:
 	///<create a tile with a rect name
 	CCSprite* _createTileSprite( const char *pRectName );
 
+	///<destroy sprite
+	void _destroySprite( CCSprite *pSprite );
+
 	///< get the tile image rect define name in script
 	virtual const char* _getTileRectName() const ;
 
@@ -58,6 +63,12 @@ protected:
 	void _extrudeImageImp( float fHeightExtruded, const char *pImageRectName, CCSprite *pSprite );
 
 	bool _isTouchedSprite( CCTouch *pTouch );
+
+
+	///<override from FiniteStateMachine
+	virtual void _processInputEvent( int nEventID ){}
+	virtual void _leaveCurrState( ){}
+	virtual void _enterNewState( ){}
 
 protected:
 
