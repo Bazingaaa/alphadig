@@ -22,8 +22,8 @@ LayerGaming* LayerGaming::s_pSharedLayerGaming = NULL;
 
 LayerGaming::LayerGaming()
 : m_pDiggingWorld( NULL )
-, m_pMainBatchNode( NULL )
-, m_pMainBatchNodeForHUD( NULL )
+, m_pDiggerBatchNode( NULL )
+, m_pTilesBatchNode( NULL )
 , m_pCurrentLvlLabel( NULL )
 , m_nCurrentDisplayedLvlValue( 0 )
 , m_pGoldObtainedLabel( NULL )
@@ -93,13 +93,21 @@ void LayerGaming::registerWithTouchDispatcher( )
 
 void LayerGaming::_createSpriteBatchNode()
 {
-	m_pMainBatchNode = CCSpriteBatchNode::create( LuaHelper::s_getStringVar("IMAGE_MAIN").c_str(), 64);
-	addChild( m_pMainBatchNode );
-	CCActionInterval *pGoUp = CCMoveBy::create( 1.0f, ccp( 0, 50 ) );
-	m_pMainBatchNode->runAction( (CCRepeatForever::create( pGoUp ) ) );
+	m_pDiggerBatchNode = _createSpriteBatchNode( "IMAGE_DIGGER", 64, true );
+	m_pTilesBatchNode = _createSpriteBatchNode( "IMAGE_TILES", 64, true );
+}
 
-	m_pMainBatchNodeForHUD = CCSpriteBatchNode::create( LuaHelper::s_getStringVar("IMAGE_MAIN").c_str(), 4);
-	addChild( m_pMainBatchNodeForHUD );
+CCSpriteBatchNode* LayerGaming::_createSpriteBatchNode( const char *pImgName, unsigned int nCapacity, bool bGoingUp )
+{
+	CCSpriteBatchNode *pRetNode = CCSpriteBatchNode::create( LuaHelper::s_getStringVar(pImgName).c_str(), nCapacity );
+	addChild( pRetNode );
+	if( bGoingUp )
+	{
+		CCActionInterval *pGoUp = CCMoveBy::create( 1.0f, ccp( 0, 50 ) );
+		pRetNode->runAction( (CCRepeatForever::create( pGoUp ) ) );
+	}
+
+	return pRetNode;
 }
 
 void LayerGaming::_updateGame( float fElapsedTime )
@@ -114,11 +122,11 @@ void LayerGaming::_createHUD()
 {
 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 	//create gold hud
-	CCRect goldRect = LuaHelper::s_getRectVar( "RECT_GOLD_HUD" );
-	m_pGoldImg = CCSprite::createWithTexture( m_pMainBatchNodeForHUD->getTexture(), goldRect );
+	CCRect goldRect = LuaHelper::s_getRectVar( "RECT_HUD_GOLD" );
+	m_pGoldImg = CCSprite::create( LuaHelper::s_getStringVar("IMAGE_UI").c_str(), goldRect );
 	m_pGoldImg->setAnchorPoint( ccp( 0.0f, 1.0f) );
 	m_pGoldImg->setPosition( ccp( 0.0f, winSize.height ) );
-	m_pMainBatchNodeForHUD->addChild( m_pGoldImg );
+	addChild( m_pGoldImg );
 
 	m_pGoldObtainedLabel = CCLabelTTF::create("0", "Arial", 30 );
 	m_pGoldObtainedLabel->setAnchorPoint( ccp( 0.0f, 1.0f) );
@@ -126,11 +134,11 @@ void LayerGaming::_createHUD()
 	addChild( m_pGoldObtainedLabel );
 
 	//create lvl label hud
-	CCRect lvlRect = LuaHelper::s_getRectVar( "RECT_LVL_HUD" );
-	m_pLvlImg = CCSprite::createWithTexture( m_pMainBatchNodeForHUD->getTexture(), lvlRect );
+	CCRect lvlRect = LuaHelper::s_getRectVar( "RECT_HUD_LVL" );
+	m_pLvlImg = CCSprite::create( LuaHelper::s_getStringVar("IMAGE_UI").c_str(), lvlRect );
 	m_pLvlImg->setAnchorPoint( ccp( 1.0f, 1.0f) );
 	m_pLvlImg->setPosition( ccp( winSize.width, winSize.height ) );
-	m_pMainBatchNodeForHUD->addChild( m_pLvlImg );
+	addChild( m_pLvlImg );
 
 	m_pCurrentLvlLabel = CCLabelTTF::create("0", "Arial", 30 );
 	m_pCurrentLvlLabel->setAnchorPoint( ccp( 1.0f, 1.0f) );

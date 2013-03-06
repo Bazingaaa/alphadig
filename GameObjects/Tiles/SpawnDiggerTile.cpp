@@ -31,16 +31,16 @@ void SpawnDiggerTile::create()
 
 	m_pSpriteSpawnDigger = _createTileSprite( _getTileRectName() );
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
-	pMainBatchNode->reorderChild( m_pSpriteSpawnDigger, m_pSpriteSoil->getZOrder() + 1 );
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
+	pBatchNode->reorderChild( m_pSpriteSpawnDigger, m_pSpriteSoil->getZOrder() + 1 );
 }
 
 void SpawnDiggerTile::destroy()
 {
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
 
-	pMainBatchNode->removeChild( m_pSpriteSpawnDigger, true );
+	pBatchNode->removeChild( m_pSpriteSpawnDigger, true );
 
 	m_pSpriteSpawnDigger = NULL;
 
@@ -60,7 +60,7 @@ void SpawnDiggerTile::touched()
 
 const char* SpawnDiggerTile::_getTileRectName() const
 {
-	return "RECT_SPAWN_DIGGER_TILE";
+	return "RECT_TILE_SPAWN_TILE";
 }
 
 void SpawnDiggerTile::_extrudeImage( float fHeightExtruded )

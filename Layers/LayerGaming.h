@@ -46,7 +46,8 @@ public:
 	static LayerGaming* sharedLayerGaming() { return s_pSharedLayerGaming; }
 
 	///< get the main sprite batch node
-	CCSpriteBatchNode* getMainSpriteBatchNode() { return m_pMainBatchNode; }
+	CCSpriteBatchNode* getDiggerBatchNode() { return m_pDiggerBatchNode; }
+	CCSpriteBatchNode* getTilesBatchNode() { return m_pTilesBatchNode; }
 
 	///<update the gold hud
 	void updateGoldHUD();
@@ -55,6 +56,7 @@ protected:
 
 	///<create the sprite batch node
 	void _createSpriteBatchNode( );
+	CCSpriteBatchNode* _createSpriteBatchNode( const char *pImgName, unsigned int nCapacity, bool bGoingUp );
 
 	///<update the game
 	void _updateGame( float fElapsedTime );
@@ -72,8 +74,8 @@ protected:
 	static LayerGaming *s_pSharedLayerGaming;
 
 	///<the bathed sprite node
-	CCSpriteBatchNode *m_pMainBatchNode;
-	CCSpriteBatchNode *m_pMainBatchNodeForHUD;
+	CCSpriteBatchNode *m_pDiggerBatchNode;
+	CCSpriteBatchNode *m_pTilesBatchNode;
 
 	///<some hud UI elements
 	CCLabelTTF *m_pCurrentLvlLabel;

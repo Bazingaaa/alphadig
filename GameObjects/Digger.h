@@ -86,7 +86,7 @@ protected:
 	float m_fDynFriction;
 
 	///<CCSprite obj ptr of the digger
-	CCSprite *m_pDiggerSprite;
+	CCSprite *m_pDiggerBodySprite;
 
 	///<the touch rect of this digger
 	CCRect m_touchRect;

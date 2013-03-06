@@ -33,16 +33,16 @@ void GoldTile::create()
 
 	m_pSpriteGold = _createTileSprite( _getTileRectName() );
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
-	pMainBatchNode->reorderChild( m_pSpriteGold, m_pSpriteSoil->getZOrder() + 1 );
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
+	pBatchNode->reorderChild( m_pSpriteGold, m_pSpriteSoil->getZOrder() + 1 );
 }
 
 void GoldTile::destroy()
 {
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
 
-	pMainBatchNode->removeChild( m_pSpriteGold, true );
+	pBatchNode->removeChild( m_pSpriteGold, true );
 
 	m_pSpriteGold = NULL;
 
@@ -60,7 +60,7 @@ void GoldTile::touched()
 
 const char* GoldTile::_getTileRectName() const
 {
-	return "RECT_GOLD_TILE";
+	return "RECT_TILE_GOLD";
 }
 
 void GoldTile::_extrudeImage( float fHeightExtruded )

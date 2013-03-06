@@ -56,7 +56,7 @@ void SoilTile::extrude( float fHeightExtruded )
 
 const char* SoilTile::_getTileRectName() const
 {
-	return "RECT_SOIL_TILE";
+	return "RECT_TILE_SOIL_STYLE_1";
 }
 
 void SoilTile::_extrudeImage( float fHeightExtruded )
@@ -102,13 +102,13 @@ bool SoilTile::_isTouchedSprite( CCTouch *pTouch )
 CCSprite* SoilTile::_createTileSprite( const char* pRectName )
 {
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
 	DiggingWorld *pDiggingWorld = DiggingWorld::sharedDiggingWorld();
 
 	CCSprite *pRetSprite = NULL;
 	CCRect RECT_TILE = LuaHelper::s_getRectVar( pRectName );
-	pRetSprite = CCSprite::createWithTexture( pMainBatchNode->getTexture(), RECT_TILE );
-	pMainBatchNode->addChild( pRetSprite );
+	pRetSprite = CCSprite::createWithTexture( pBatchNode->getTexture(), RECT_TILE );
+	pBatchNode->addChild( pRetSprite );
 
 	//计算sprite的位置
 	float fSoilSpriteX = 0.0f;
@@ -128,9 +128,9 @@ CCSprite* SoilTile::_createTileSprite( const char* pRectName )
 void SoilTile::_destroySprite( CCSprite *pSprite )
 {
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
 
-	pMainBatchNode->removeChild( pSprite, true );
+	pBatchNode->removeChild( pSprite, true );
 }
 
 }

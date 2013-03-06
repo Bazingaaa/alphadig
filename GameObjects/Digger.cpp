@@ -31,7 +31,7 @@ Digger::Digger( DiggingPath *pHostPath )
 , m_fMomentum( 0.0f )
 , m_fMiu( 1.0f )
 , m_fDynFriction( 0.0f )
-, m_pDiggerSprite( NULL )
+, m_pDiggerBodySprite( NULL )
 , m_touchRect( )
 {
 }
@@ -43,14 +43,15 @@ Digger::~Digger()
 void Digger::create()
 {
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getDiggerBatchNode();
 	DiggingWorld *pDiggingWorld = DiggingWorld::sharedDiggingWorld();
 
+	m_fDynFriction = m_fMiu * m_fMassive * s_fGravityAcc;
 
-	CCRect RECT_DIGGER = LuaHelper::s_getRectVar("RECT_DIGGER");
-
-	m_pDiggerSprite = CCSprite::createWithTexture( pMainBatchNode->getTexture(), RECT_DIGGER );
-	pMainBatchNode->addChild( m_pDiggerSprite );
+	//create the digger body
+	CCRect RECT_DIGGER = LuaHelper::s_getRectVar("RECT_DIGGER_BODY");
+	m_pDiggerBodySprite = CCSprite::createWithTexture( pBatchNode->getTexture(), RECT_DIGGER );
+	pBatchNode->addChild( m_pDiggerBodySprite );
 
 
 	//计算digger sprite的位置
@@ -61,12 +62,50 @@ void Digger::create()
 	pDiggingWorld->convertToGLCoordinate( m_fHeight, nColumn, fDiggerSpriteX, fDiggerSpriteY );
 
 	float fTileSize = pDiggingWorld->getTileSize();
-	m_pDiggerSprite->setAnchorPoint( CCPoint( 0.5f, 0.0f ) );
-	m_pDiggerSprite->setScaleX( fTileSize / RECT_DIGGER.size.width );
-	m_pDiggerSprite->setScaleY( fTileSize * 4.0f / RECT_DIGGER.size.height );
-	m_pDiggerSprite->setPosition( ccp( fDiggerSpriteX, fDiggerSpriteY ) );
+	m_pDiggerBodySprite->setAnchorPoint( CCPoint( 0.5f, 0.0f ) );
+	m_pDiggerBodySprite->setScaleX( fTileSize / RECT_DIGGER.size.width );
+	//m_pDiggerBodySprite->setScaleY( fTileSize * 4.0f / RECT_DIGGER.size.height );
+	m_pDiggerBodySprite->setPosition( ccp( fDiggerSpriteX, fDiggerSpriteY ) );
 
-	m_fDynFriction = m_fMiu * m_fMassive * s_fGravityAcc;
+	//create the digger drill
+	CCArray *pAnimFrames = CCArray::createWithCapacity(16);
+	for( unsigned int i = 0; i < 16; ++i )
+	{
+		unsigned int x = i / 8;
+		unsigned int y = i % 8;
+		CCSpriteFrame *pFrame =
+				CCSpriteFrame::createWithTexture(pBatchNode->getTexture(), CCRectMake(64*x + 64, 64*y, 64, 64) );
+		pAnimFrames->addObject( pFrame );
+	}
+	CCAnimation *pAnimDrill = CCAnimation::createWithSpriteFrames(pAnimFrames, 0.2f);
+	CCSprite *pDiggerDrill =
+			CCSprite::createWithSpriteFrame( static_cast< CCSpriteFrame* >( pAnimFrames->objectAtIndex(0) ) );
+	m_pDiggerBodySprite->addChild( pDiggerDrill );
+	pDiggerDrill->setAnchorPoint( CCPoint( 0.0f, 0.0f ) );
+	pDiggerDrill->setPosition( ccp( 0.0f, 0.0f ) );
+	pDiggerDrill->runAction( CCRepeatForever::create( CCAnimate::create(pAnimDrill) ) );
+
+	//create the digger gear
+	pAnimFrames = CCArray::createWithCapacity(16);
+	for( unsigned int i = 0; i < 16; ++i )
+	{
+		unsigned int x = i / 8;
+		unsigned int y = i % 8;
+		CCSpriteFrame *pFrame =
+				CCSpriteFrame::createWithTexture(pBatchNode->getTexture(), CCRectMake(64*x + 192, 64*y, 64, 64) );
+		pAnimFrames->addObject( pFrame );
+	}
+	CCAnimation *pAnimGear = CCAnimation::createWithSpriteFrames(pAnimFrames, 0.2f);
+	CCSprite *pDiggerGear =
+			CCSprite::createWithSpriteFrame( static_cast< CCSpriteFrame* >( pAnimFrames->objectAtIndex(0) ) );
+	m_pDiggerBodySprite->addChild( pDiggerGear );
+	pDiggerGear->setAnchorPoint( CCPoint( 0.0f, 0.0f ) );
+	pDiggerGear->setPosition( ccp( 0.0f, fTileSize * 3.5f ) );
+	pDiggerGear->runAction( CCRepeatForever::create( CCAnimate::create(pAnimGear) ) );
+
+
+	//-----test
+
 }
 
 void Digger::dig( float fForce )
@@ -119,10 +158,10 @@ void Digger::update( float fElapsedTime )
 	float fDiggerSpriteX = 0.0f;
 	float fDiggerSpriteY = 0.0f;
 	pDiggingWorld->convertToGLCoordinate( m_fHeight, 0, fDiggerSpriteX, fDiggerSpriteY );
-	m_pDiggerSprite->setPositionY( fDiggerSpriteY );
+	m_pDiggerBodySprite->setPositionY( fDiggerSpriteY );
 
 	//update the touch rect
-	fDiggerSpriteX = m_pDiggerSprite->getPositionX();
+	fDiggerSpriteX = m_pDiggerBodySprite->getPositionX();
 	float fTileSize = pDiggingWorld->getTileSize();
 	m_touchRect.setRect( fDiggerSpriteX - fTileSize * 0.5f,  fDiggerSpriteY - fTileSize * 0.5f,
 						 fTileSize, fTileSize );
@@ -133,9 +172,9 @@ bool Digger::isTouched( CCTouch *pTouch )
 	if( isBrokenup() )
 		return false;
 
-	CCRect RECT_DIGGER = LuaHelper::s_getRectVar("RECT_DIGGER");
+	CCRect RECT_DIGGER = LuaHelper::s_getRectVar("RECT_DIGGER_BODY");
 
-	CCPoint touchPoint = m_pDiggerSprite->convertTouchToNodeSpace( pTouch );
+	CCPoint touchPoint = m_pDiggerBodySprite->convertTouchToNodeSpace( pTouch );
 
 	return RECT_DIGGER.containsPoint( touchPoint );
 }

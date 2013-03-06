@@ -49,7 +49,7 @@ void DiggingWorld::startNewWorld()
 void DiggingWorld::update( float fElapsedTime )
 {
 	// update the button height
-	CCSpriteBatchNode *pMainBatchNode = LayerGaming::sharedLayerGaming()->getMainSpriteBatchNode();
+	CCSpriteBatchNode *pMainBatchNode = LayerGaming::sharedLayerGaming()->getTilesBatchNode();
 	float fBatchNodePosY = pMainBatchNode->getPositionY();
 	m_fCurrentBottomHeight = fBatchNodePosY / m_fTileSize + m_fTileCountPerColumn;
 

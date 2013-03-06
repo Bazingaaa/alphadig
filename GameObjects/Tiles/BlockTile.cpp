@@ -34,8 +34,8 @@ void BlockTile::create( )
 
 	m_pSpriteBlock = _createTileSprite( _getTileRectName() );
 	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pMainBatchNode = pLayerGaming->getMainSpriteBatchNode();
-	pMainBatchNode->reorderChild( m_pSpriteBlock, m_pSpriteSoil->getZOrder() + 1 );
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
+	pBatchNode->reorderChild( m_pSpriteBlock, m_pSpriteSoil->getZOrder() + 1 );
 }
 
 void BlockTile::destroy()

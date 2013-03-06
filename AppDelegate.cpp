@@ -60,7 +60,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     //script config
     CCLuaEngine* pEngine = CCLuaEngine::defaultEngine();
     CCScriptEngineManager::sharedManager()->setScriptEngine(pEngine);
-    std::string dirPath = "Scripts";
     LuaHelper::s_executeFile( "resources_define.lua");
     LuaHelper::s_executeFile( "ui_texts_chs.lua");
 

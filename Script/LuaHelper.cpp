@@ -15,7 +15,7 @@ using namespace cocos2d;
 void LuaHelper::s_executeFile( const char *pFileName )
 {
 	CCLuaEngine *pLuaEngine = static_cast< CCLuaEngine* > ( CCScriptEngineManager::sharedManager()->getScriptEngine() );
-	std::string strDirPath( "Scripts" );
+	std::string strDirPath( "scripts" );
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     CCString* pstrFileContent = CCString::createWithContentsOfFile((strDirPath + "/" + pFileName).c_str());
     if (pstrFileContent)
