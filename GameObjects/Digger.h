@@ -14,12 +14,14 @@ namespace cocos2d
 	class CCSprite;
 	class CCTouch;
 	class CCAction;
+	class CCAnimation;
 }
 
 namespace AlphaDig
 {
 
 class DiggingPath;
+class ADAnimate;
 
 using namespace cocos2d;
 /**
@@ -87,6 +89,13 @@ protected:
 
 	///<CCSprite obj ptr of the digger
 	CCSprite *m_pDiggerBodySprite;
+	CCSprite *m_pDiggerDrill;
+	CCSprite *m_pDiggerGear;
+	CCAnimation *m_pAnimDrill;
+	CCAnimation *m_pAnimGear;
+	ADAnimate *m_pActionAnimDrill;
+	ADAnimate *m_pActionAnimGear;
+
 
 	///<the touch rect of this digger
 	CCRect m_touchRect;

@@ -5,6 +5,7 @@
 #include "GameObjects/DiggingPath.h"
 #include "Script/LuaHelper.h"
 #include "Layers/LayerGaming.h"
+#include "CocosExt/ADAnimate.h"
 
 #include "sprite_nodes/CCSpriteBatchNode.h"
 #include "sprite_nodes/CCSprite.h"
@@ -32,6 +33,12 @@ Digger::Digger( DiggingPath *pHostPath )
 , m_fMiu( 1.0f )
 , m_fDynFriction( 0.0f )
 , m_pDiggerBodySprite( NULL )
+, m_pDiggerDrill( NULL )
+, m_pDiggerGear( NULL )
+, m_pAnimDrill( NULL )
+, m_pAnimGear( NULL )
+, m_pActionAnimDrill( NULL )
+, m_pActionAnimGear( NULL )
 , m_touchRect( )
 {
 }
@@ -77,13 +84,13 @@ void Digger::create()
 				CCSpriteFrame::createWithTexture(pBatchNode->getTexture(), CCRectMake(64*x + 64, 64*y, 64, 64) );
 		pAnimFrames->addObject( pFrame );
 	}
-	CCAnimation *pAnimDrill = CCAnimation::createWithSpriteFrames(pAnimFrames, 0.2f);
-	CCSprite *pDiggerDrill =
+	m_pAnimDrill = CCAnimation::createWithSpriteFrames(pAnimFrames, 0.2f);
+	m_pDiggerDrill =
 			CCSprite::createWithSpriteFrame( static_cast< CCSpriteFrame* >( pAnimFrames->objectAtIndex(0) ) );
-	m_pDiggerBodySprite->addChild( pDiggerDrill );
-	pDiggerDrill->setAnchorPoint( CCPoint( 0.0f, 0.0f ) );
-	pDiggerDrill->setPosition( ccp( 0.0f, 0.0f ) );
-	pDiggerDrill->runAction( CCRepeatForever::create( CCAnimate::create(pAnimDrill) ) );
+	m_pDiggerBodySprite->addChild( m_pDiggerDrill );
+	m_pDiggerDrill->setAnchorPoint( ccp( 0.0f, 0.0f ) );
+	m_pActionAnimDrill = ADAnimate::create( m_pAnimDrill );
+	m_pDiggerDrill->runAction( CCRepeatForever::create( m_pActionAnimDrill ) );
 
 	//create the digger gear
 	pAnimFrames = CCArray::createWithCapacity(16);
@@ -95,16 +102,14 @@ void Digger::create()
 				CCSpriteFrame::createWithTexture(pBatchNode->getTexture(), CCRectMake(64*x + 192, 64*y, 64, 64) );
 		pAnimFrames->addObject( pFrame );
 	}
-	CCAnimation *pAnimGear = CCAnimation::createWithSpriteFrames(pAnimFrames, 0.2f);
-	CCSprite *pDiggerGear =
+	m_pAnimGear = CCAnimation::createWithSpriteFrames(pAnimFrames, 1.0f);
+	m_pDiggerGear =
 			CCSprite::createWithSpriteFrame( static_cast< CCSpriteFrame* >( pAnimFrames->objectAtIndex(0) ) );
-	m_pDiggerBodySprite->addChild( pDiggerGear );
-	pDiggerGear->setAnchorPoint( CCPoint( 0.0f, 0.0f ) );
-	pDiggerGear->setPosition( ccp( 0.0f, fTileSize * 3.5f ) );
-	pDiggerGear->runAction( CCRepeatForever::create( CCAnimate::create(pAnimGear) ) );
-
-
-	//-----test
+	m_pDiggerBodySprite->addChild( m_pDiggerGear );
+	m_pDiggerGear->setAnchorPoint( CCPoint( 0.0f, 0.0f ) );
+	m_pDiggerGear->setPosition( ccp( 0.0f, fTileSize * 3.5f ) );
+	m_pActionAnimGear = ADAnimate::create( m_pAnimGear );
+	m_pDiggerGear->runAction( CCRepeatForever::create( m_pActionAnimGear ) );
 
 }
 
@@ -165,6 +170,12 @@ void Digger::update( float fElapsedTime )
 	float fTileSize = pDiggingWorld->getTileSize();
 	m_touchRect.setRect( fDiggerSpriteX - fTileSize * 0.5f,  fDiggerSpriteY - fTileSize * 0.5f,
 						 fTileSize, fTileSize );
+
+	//update the anim speed
+	m_pAnimDrill->setDelayPerUnit( 2.0f / m_fVelocity );
+	m_pActionAnimDrill->reCaculateSplitTimes();
+	m_pAnimGear->setDelayPerUnit( 2.0f / m_fVelocity );
+	m_pActionAnimGear->reCaculateSplitTimes();
 }
 
 bool Digger::isTouched( CCTouch *pTouch )
