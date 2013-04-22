@@ -42,6 +42,7 @@ public:
 	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 	//virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
 	virtual void registerWithTouchDispatcher();
+	virtual void onExit();
 
 	///<return the latest constructed layer gaming pointer
 	static LayerGaming* sharedLayerGaming() { return s_pSharedLayerGaming; }

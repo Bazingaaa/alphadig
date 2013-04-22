@@ -5,6 +5,7 @@
 #include "GameObjects/DiggingWorld.h"
 #include "Script/LuaHelper.h"
 #include "StatisticsManager.h"
+#include "CocosExt/ADParticleSystemCache.h"
 
 #include "label_nodes/CCLabelTTF.h"
 #include "sprite_nodes/CCSpriteBatchNode.h"
@@ -33,7 +34,6 @@ LayerGaming::LayerGaming()
 
 LayerGaming::~LayerGaming()
 {
-	deleteLayer();
 }
 
 
@@ -44,6 +44,8 @@ bool LayerGaming::initLayer()
 
 	do
 	{
+		ADParticleSystemCache::getSingleton().setBatchRootNode( this );
+
 		_createSpriteBatchNode();
 
 		m_pDiggingWorld = new DiggingWorld( );
@@ -70,6 +72,16 @@ void LayerGaming::deleteLayer()
 	m_pDiggingWorld->clearWorld();
 
 	CC_SAFE_RELEASE_NULL( m_pDiggingWorld );
+
+	ADParticleSystemCache::getSingleton().setBatchRootNode( NULL );
+	ADParticleSystemCache::getSingleton().removeAllParticleSystem();
+}
+
+void LayerGaming::onExit()
+{
+	deleteLayer();
+
+	CCLayer::onExit();
 }
 
 void LayerGaming::keyBackClicked( CCObject *pSender )
@@ -115,6 +127,8 @@ void LayerGaming::_updateGame( float fElapsedTime )
 	_updateHUD();
 
 	m_pDiggingWorld->update( fElapsedTime );
+
+	ADParticleSystemCache::getSingleton().recycle();
 }
 
 
