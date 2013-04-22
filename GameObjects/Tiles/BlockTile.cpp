@@ -6,6 +6,7 @@
 #include "GameObjects/DiggingPath.h"
 #include "Script/LuaHelper.h"
 #include "Layers/LayerGaming.h"
+#include "CocosExt/ADParticleSystemCache.h"
 
 #include "touch_dispatcher/CCTouch.h"
 #include "sprite_nodes/CCSpriteBatchNode.h"
@@ -87,8 +88,13 @@ void BlockTile::_processInputEvent( int nEventID )
 
 void BlockTile::_leaveCurrState()
 {
+	ADParticleSystemCache::getSingleton().playParticleSystem(
+			LuaHelper::s_getStringVar("PARTS_BLOCK_EXP").c_str(), m_pSpriteBlock->getPosition() );
+
 	_destroySprite( m_pSpriteBlock );
 	m_pSpriteBlock = NULL;
+
+
 }
 
 void BlockTile::_enterNewState()
