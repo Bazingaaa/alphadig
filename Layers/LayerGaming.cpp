@@ -72,7 +72,7 @@ void LayerGaming::deleteLayer()
 	CC_SAFE_RELEASE_NULL( m_pDiggingWorld );
 }
 
-void LayerGaming::keyBackClicked()
+void LayerGaming::keyBackClicked( CCObject *pSender )
 {
 	SceneManager::replaceMainMenuScene();
 }

@@ -5,6 +5,10 @@
 
 #include "layers_scenes_transitions_nodes/CCLayer.h"
 
+namespace cocos2d
+{
+	class CCObject;
+}
 
 namespace AlphaDig
 {
@@ -25,11 +29,11 @@ public:
 
 
 	///< UI item callback
-	void onPlayAgain();
-	void onToMainMenu();
+	void onPlayAgain( CCObject *pSender );
+	void onToMainMenu( CCObject *pSender );
 
 	///< override
-	virtual void keyBackClicked();
+	virtual void keyBackClicked( CCObject *pSender );
 
 
 };

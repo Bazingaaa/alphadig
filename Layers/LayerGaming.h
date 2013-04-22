@@ -11,6 +11,7 @@ namespace cocos2d
 	class CCSpriteBatchNode;
 	class CCLabelTTF;
 	class CCSprite;
+	class CCObject;
 }
 
 namespace AlphaDig
@@ -36,7 +37,7 @@ public:
 	void deleteLayer();
 
 	///< override
-	virtual void keyBackClicked();
+	virtual void keyBackClicked( CCObject *pSender );
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
 	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 	//virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);

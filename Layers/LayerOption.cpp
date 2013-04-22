@@ -72,14 +72,16 @@ bool LayerOption::initLayer()
 		menu->setPosition(ccp(s.width / 2, s.height / 2));
 
 	} while (false);
+
+	return bRet;
 }
 
-void LayerOption::menuCallback()
+void LayerOption::menuCallback( CCObject *pSender )
 {
 
 }
 
-void LayerOption::keyBackClicked()
+void LayerOption::keyBackClicked( CCObject *pSender )
 {
 	SceneManager::replaceMainMenuScene();
 }
