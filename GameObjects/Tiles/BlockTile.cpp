@@ -88,8 +88,9 @@ void BlockTile::_processInputEvent( int nEventID )
 
 void BlockTile::_leaveCurrState()
 {
+	const CCPoint point = m_pSpriteBlock->getPosition();
 	ADParticleSystemCache::getSingleton().playParticleSystem(
-			LuaHelper::s_getStringVar("PARTS_BLOCK_EXP").c_str(), m_pSpriteBlock->getPosition() );
+			LuaHelper::s_getStringVar("PARTS_BLOCK_EXP").c_str(), m_pSpriteBlock->getParent()->convertToWorldSpace( point ) );
 
 	_destroySprite( m_pSpriteBlock );
 	m_pSpriteBlock = NULL;

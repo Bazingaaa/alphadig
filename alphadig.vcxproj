@@ -49,7 +49,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;../cocos2d-2.0-x-2.0.3/cocos2dx;../cocos2d-2.0-x-2.0.3/cocos2dx/include;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/win32;../cocos2d-2.0-x-2.0.3/cocos2dx/kazmath/include;../cocos2d-2.0-x-2.0.3/CocosDenshion/include;../cocos2d-2.0-x-2.0.3/scripting/lua/lua;../cocos2d-2.0-x-2.0.3/scripting/lua/tolua;../cocos2d-2.0-x-2.0.3/scripting/lua/cocos2dx_support;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/third_party/win32/OGLES;../cocos2d-2.0-x-2.0.3/cocos2dx/platform</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>

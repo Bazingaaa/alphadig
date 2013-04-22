@@ -70,25 +70,16 @@ void ADParticleSystemCache::removeAllParticleSystem()
 	ParticleSystemBatchMap::iterator iter = m_particleBatchesUsed.begin();
 	for( ; iter != m_particleBatchesUsed.end(); ++iter )
 	{
-		ParticleSystemList &usedList = iter->second._particleSystems;
-		for( ParticleSystemList::iterator iterList = usedList.begin(); iterList != usedList.end(); ++iterList )
-		{
-			// wierd crash here
-			iter->second._pBatchNode->removeChild( *iterList, true );
-		}
-		usedList.clear();
+		iter->second._particleSystems.clear();
+		iter->second._pBatchNode->removeAllChildrenWithCleanup(true);
 		iter->second._pBatchNode = NULL;
 	}
 	m_particleBatchesUsed.clear();
 
 	for( iter = m_particleBatchesIdle.begin(); iter != m_particleBatchesIdle.end(); ++iter )
 	{
-		ParticleSystemList &usedList = iter->second._particleSystems;
-		for( ParticleSystemList::iterator iterList = usedList.begin(); iterList != usedList.end(); ++iterList )
-		{
-			iter->second._pBatchNode->removeChild( *iterList, true );
-		}
-		usedList.clear();
+		iter->second._particleSystems.clear();
+		iter->second._pBatchNode->removeAllChildrenWithCleanup(true);
 		iter->second._pBatchNode = NULL;
 	}
 	m_particleBatchesIdle.clear();
