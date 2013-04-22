@@ -67,7 +67,7 @@ void LayerMainMenu::onQuit( CCObject *pSender )
 	CCDirector::sharedDirector()->end();
 }
 
-void LayerMainMenu::keyBackClicked()
+void LayerMainMenu::keyBackClicked( CCObject *pSender )
 {
 	CCDirector::sharedDirector()->end();
 }

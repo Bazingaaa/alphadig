@@ -29,19 +29,15 @@ public:
 	 */
 	bool initLayer();
 
-	/**界面item的回调函数*/
+	/**界面item的回调函数 */
 	void onPlay( CCObject *pSender );
 	void onQuit( CCObject *pSender );
 
 	///< override
-	virtual void keyBackClicked();
+	virtual void keyBackClicked( CCObject *pSender );
 
 };
 
 
-};
-
-
-
+}
 #endif
-

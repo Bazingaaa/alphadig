@@ -29,10 +29,10 @@ public:
 	 */
 	bool initLayer();
 
-	void menuCallback();
+	void menuCallback( CCObject *pSender );
 
 	///< override
-	virtual void keyBackClicked();
+	virtual void keyBackClicked( CCObject *pSender );
 
 };
 

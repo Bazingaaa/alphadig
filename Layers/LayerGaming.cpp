@@ -84,7 +84,7 @@ void LayerGaming::onExit()
 	CCLayer::onExit();
 }
 
-void LayerGaming::keyBackClicked()
+void LayerGaming::keyBackClicked( CCObject *pSender )
 {
 	SceneManager::replaceMainMenuScene();
 }

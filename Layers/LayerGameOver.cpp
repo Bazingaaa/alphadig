@@ -66,19 +66,19 @@ void LayerGameOver::deleteLayer()
 	// auto release obj
 }
 
-void LayerGameOver::onPlayAgain()
+void LayerGameOver::onPlayAgain( CCObject *pSender )
 {
 	SceneManager::replaceGamingScene();
 }
 
-void LayerGameOver::onToMainMenu()
+void LayerGameOver::onToMainMenu( CCObject *pSender )
 {
 	SceneManager::replaceMainMenuScene();
 }
 
-void LayerGameOver::keyBackClicked()
+void LayerGameOver::keyBackClicked( CCObject *pSender )
 {
-	onToMainMenu();
+	onToMainMenu( pSender );
 }
 
 }

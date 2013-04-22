@@ -43,7 +43,7 @@ public:
 	///<get the tile size
 	float getTileSize() const { return  m_fTileSize; }
 	///<get the tile count per column
-	float getTileCountPerColumn() const { return m_nTileCountPerColumn; }
+	unsigned int getTileCountPerColumn() const { return m_nTileCountPerColumn; }
 
 	///<get the shared world
 	static DiggingWorld* sharedDiggingWorld() { return s_pSharedDiggingWorld; }

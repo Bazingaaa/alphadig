@@ -66,7 +66,7 @@ void Digger::create()
 
 	float fDiggerSpriteX = 0.0f;
 	float fDiggerSpriteY = 0.0f;
-	pDiggingWorld->convertToGLCoordinate( m_fHeight, nColumn, fDiggerSpriteX, fDiggerSpriteY );
+	pDiggingWorld->convertToGLCoordinate( m_fHeight, static_cast<float>(nColumn), fDiggerSpriteX, fDiggerSpriteY );
 
 	float fTileSize = pDiggingWorld->getTileSize();
 	m_pDiggerBodySprite->setAnchorPoint( CCPoint( 0.5f, 0.0f ) );
@@ -152,7 +152,7 @@ void Digger::update( float fElapsedTime )
 	// do height clamp
 	DiggingWorld *pDiggingWorld = DiggingWorld::sharedDiggingWorld();
 	float fBottomHeight = pDiggingWorld->getCurrentBottomHeight();
-	float fClampedHeight = std::min( fBottomHeight, m_pHostPath->getTopBlockHeight() );
+	float fClampedHeight = std::min<float>( fBottomHeight, m_pHostPath->getTopBlockHeight() );
 	if( m_fHeight > fClampedHeight )
 	{
 		m_fHeight = fClampedHeight;

@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7DDBFA49-603A-4A6A-B45E-035D0C35429F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>alphadig</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./;../cocos2d-2.0-x-2.0.3/cocos2dx;../cocos2d-2.0-x-2.0.3/cocos2dx/include;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/win32;../cocos2d-2.0-x-2.0.3/cocos2dx/kazmath/include;../cocos2d-2.0-x-2.0.3/CocosDenshion/include;../cocos2d-2.0-x-2.0.3/scripting/lua/lua;../cocos2d-2.0-x-2.0.3/scripting/lua/tolua;../cocos2d-2.0-x-2.0.3/scripting/lua/cocos2dx_support;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/third_party/win32/OGLES;../cocos2d-2.0-x-2.0.3/cocos2dx/platform</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../cocos2d-2.0-x-2.0.3/Debug.win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcocos2d.lib;libCocosDenshion.lib;libExtensions.lib;liblua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./;../cocos2d-2.0-x-2.0.3/cocos2dx;../cocos2d-2.0-x-2.0.3/cocos2dx/include;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/win32;../cocos2d-2.0-x-2.0.3/cocos2dx/kazmath/include;../cocos2d-2.0-x-2.0.3/CocosDenshion/include;../cocos2d-2.0-x-2.0.3/scripting/lua/lua;../cocos2d-2.0-x-2.0.3/scripting/lua/tolua;../cocos2d-2.0-x-2.0.3/scripting/lua/cocos2dx_support;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/third_party/win32/OGLES;../cocos2d-2.0-x-2.0.3/cocos2dx/platform</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\CCLuaEngine.h" />
+    <ClInclude Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\Cocos2dxLuaLoader.h" />
+    <ClInclude Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\LuaCocos2d.h" />
+    <ClInclude Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\tolua_fix.h" />
+    <ClInclude Include="AppDelegate.h" />
+    <ClInclude Include="CocosExt\ADAnimate.h" />
+    <ClInclude Include="CocosExt\ADParticleSystemCache.h" />
+    <ClInclude Include="GameObjects\Digger.h" />
+    <ClInclude Include="GameObjects\DiggingPath.h" />
+    <ClInclude Include="GameObjects\DiggingWorld.h" />
+    <ClInclude Include="GameObjects\Tiles\BlockTile.h" />
+    <ClInclude Include="GameObjects\Tiles\GoldTile.h" />
+    <ClInclude Include="GameObjects\Tiles\SoilTile.h" />
+    <ClInclude Include="GameObjects\Tiles\SpawnDiggerTile.h" />
+    <ClInclude Include="Layers\LayerGameOver.h" />
+    <ClInclude Include="Layers\LayerGaming.h" />
+    <ClInclude Include="Layers\LayerMainMenu.h" />
+    <ClInclude Include="Layers\LayerOption.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Script\LuaHelper.h" />
+    <ClInclude Include="StatisticsManager.h" />
+    <ClInclude Include="Utilities\FiniteStateMachine.h" />
+    <ClInclude Include="win32_main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\CCLuaEngine.cpp" />
+    <ClCompile Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\Cocos2dxLuaLoader.cpp" />
+    <ClCompile Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\LuaCocos2d.cpp" />
+    <ClCompile Include="..\cocos2d-2.0-x-2.0.3\scripting\lua\cocos2dx_support\tolua_fix.c" />
+    <ClCompile Include="AppDelegate.cpp" />
+    <ClCompile Include="CocosExt\ADAnimate.cpp" />
+    <ClCompile Include="CocosExt\ADParticleSystemCache.cpp" />
+    <ClCompile Include="GameObjects\Digger.cpp" />
+    <ClCompile Include="GameObjects\DiggingPath.cpp" />
+    <ClCompile Include="GameObjects\DiggingWorld.cpp" />
+    <ClCompile Include="GameObjects\Tiles\BlockTile.cpp" />
+    <ClCompile Include="GameObjects\Tiles\GoldTile.cpp" />
+    <ClCompile Include="GameObjects\Tiles\SoilTile.cpp" />
+    <ClCompile Include="GameObjects\Tiles\SpawnDiggerTile.cpp" />
+    <ClCompile Include="Layers\LayerGameOver.cpp" />
+    <ClCompile Include="Layers\LayerGaming.cpp" />
+    <ClCompile Include="Layers\LayerMainMenu.cpp" />
+    <ClCompile Include="Layers\LayerOption.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Script\LuaHelper.cpp" />
+    <ClCompile Include="StatisticsManager.cpp" />
+    <ClCompile Include="Utilities\FiniteStateMachine.cpp" />
+    <ClCompile Include="win32_main.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

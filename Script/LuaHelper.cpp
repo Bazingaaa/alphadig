@@ -5,6 +5,7 @@
 #include "CCLuaEngine.h"
 #include "cocoa/CCString.h"
 #include "cocoa/CCGeometry.h"
+#include "CCFileUtils.h"
 
 
 namespace AlphaDig
@@ -24,7 +25,7 @@ void LuaHelper::s_executeFile( const char *pFileName )
     }
 #else
     std::string path = CCFileUtils::sharedFileUtils()->fullPathFromRelativePath((strDirPath + "/" + pFileName).c_str());
-    pLuaEngine->addSearchPath(path.substr(0, path.find_last_of("/") - dirPath.length()).c_str());
+    pLuaEngine->addSearchPath(path.substr(0, path.find_last_of("/") - strDirPath.length()).c_str());
     pLuaEngine->executeScriptFile(path.c_str());
 #endif
 }
