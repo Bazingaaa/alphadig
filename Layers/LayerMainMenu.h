@@ -18,6 +18,7 @@ namespace AlphaDig
 
 using namespace cocos2d;
 
+
 class LayerMainMenu : public cocos2d::CCLayer
 {
 public:
@@ -35,6 +36,13 @@ public:
 
 	///< override
 	virtual void keyBackClicked( CCObject *pSender );
+
+protected:
+
+	///<update main menu
+	void _updateMainMenu( float fElapsedTime );
+
+protected:
 
 };
 

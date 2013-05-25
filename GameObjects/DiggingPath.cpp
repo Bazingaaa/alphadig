@@ -2,7 +2,7 @@
 #include <algorithm>
 
 #include "GameObjects/DiggingPath.h"
-#include "GameObjects/Digger.h"
+#include "GameObjects/GameDigger.h"
 #include "GameObjects/Tiles/SoilTile.h"
 #include "GameObjects/Tiles/BlockTile.h"
 #include "GameObjects/Tiles/GoldTile.h"
@@ -26,19 +26,19 @@ namespace AlphaDig
 
 
 DiggingPath::DiggingPath( unsigned int nPathColumn)
-: m_pDigger( NULL )
+: m_pGameDigger( NULL )
 , m_bCreated( false )
 , m_nPathColumn( nPathColumn )
 , m_nCurrMaxHeightLvl( 0 )
 , m_bPathClosed( false )
-, m_bTouchBegan( false )
+, m_bDiggerTouched( false )
 {
 
 }
 
 DiggingPath::~DiggingPath()
 {
-	CC_SAFE_RELEASE_NULL( m_pDigger );
+	CC_SAFE_RELEASE_NULL( m_pGameDigger );
 	for( TileList::iterator iter = m_soilTiles.begin(); iter != m_soilTiles.end(); ++iter )
 	{
 		CC_SAFE_RELEASE_NULL( *iter );
@@ -50,10 +50,10 @@ DiggingPath::~DiggingPath()
 void DiggingPath::create()
 {
 	//创建挖掘机
-	m_pDigger = new Digger( this );
-	m_pDigger->create();
+	m_pGameDigger = new GameDigger( this );
+	m_pGameDigger->create();
 	if( m_nPathColumn == 2 )
-		m_pDigger->setMomentum( 100.0f );
+		m_pGameDigger->setMomentum( 100.0f );
 
 	//创建土方
 	unsigned int nTileCountPerColumn = DiggingWorld::sharedDiggingWorld()->getTileCountPerColumn();
@@ -90,17 +90,17 @@ void DiggingPath::update( float fElapsedTime )
 		m_nCurrMaxHeightLvl = nCachedHeightLvl;
 	}
 
-	m_pDigger->update( fElapsedTime );
+	m_pGameDigger->update( fElapsedTime );
 
 	//根据挖掘机的高度，销毁土方
 	CCAssert( !m_soilTiles.empty(), "Tiles can't be empty !" );
 	SoilTile *pTopTile = m_soilTiles.front();
-	float fHeightDiff = m_pDigger->getHeight() - pTopTile->getTopHeight();
+	float fHeightDiff = m_pGameDigger->getHeight() - pTopTile->getTopHeight();
 	if( fHeightDiff > 0.0f )
 		pTopTile->extrude( fHeightDiff );
 
 	//see if the digger is out of range
-	if( m_pDigger->isBrokenup() )
+	if( m_pGameDigger->isBrokenup() )
 	{
 		m_bPathClosed = true;
 	}
@@ -128,7 +128,9 @@ void DiggingPath::touchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			}
 		}
 
-		m_bTouchBegan = m_pDigger->isTouched( pTouch );
+		m_bDiggerTouched = m_pGameDigger->isTouched( pTouch );
+		if( m_bDiggerTouched )
+			m_pGameDigger->startDragging();
 	}
 }
 
@@ -139,10 +141,10 @@ void DiggingPath::touchesMoved( CCSet *pTouches, CCEvent *pEvent )
 	for (; iter != pTouches->end(); iter++)
 	{
 		CCTouch* pTouch = (CCTouch*)(*iter);
-		if( m_bTouchBegan )
+		if( m_bDiggerTouched )
 		{
 			CCPoint delta = pTouch->getDelta();
-			m_pDigger->dig( -delta.y );
+			m_pGameDigger->dig( -delta.y * 5.0f );
 			break;
 		}
 
@@ -180,9 +182,9 @@ void DiggingPath::notifyRemoveTile( SoilTile *pTile )
 
 void DiggingPath::respawnDigger()
 {
-	if( !m_pDigger->isBrokenup() )
+	if( !m_pGameDigger->isBrokenup() )
 		return;
-	m_pDigger->setMomentum( 200.0f );
+	m_pGameDigger->setMomentum( 200.0f );
 }
 
 void DiggingPath::_removeTile( SoilTile *pTile )

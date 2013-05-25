@@ -51,7 +51,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;../cocos2d-2.0-x-2.0.3/cocos2dx;../cocos2d-2.0-x-2.0.3/cocos2dx/include;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/win32;../cocos2d-2.0-x-2.0.3/cocos2dx/kazmath/include;../cocos2d-2.0-x-2.0.3/CocosDenshion/include;../cocos2d-2.0-x-2.0.3/scripting/lua/lua;../cocos2d-2.0-x-2.0.3/scripting/lua/tolua;../cocos2d-2.0-x-2.0.3/scripting/lua/cocos2dx_support;../cocos2d-2.0-x-2.0.3/cocos2dx/platform/third_party/win32/OGLES;../cocos2d-2.0-x-2.0.3/cocos2dx/platform</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4819;4251;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,6 +89,7 @@
     <ClInclude Include="CocosExt\ADAnimate.h" />
     <ClInclude Include="CocosExt\ADParticleSystemCache.h" />
     <ClInclude Include="GameObjects\Digger.h" />
+    <ClInclude Include="GameObjects\GameDigger.h" />
     <ClInclude Include="GameObjects\DiggingPath.h" />
     <ClInclude Include="GameObjects\DiggingWorld.h" />
     <ClInclude Include="GameObjects\Tiles\BlockTile.h" />
@@ -97,6 +98,7 @@
     <ClInclude Include="GameObjects\Tiles\SpawnDiggerTile.h" />
     <ClInclude Include="Layers\LayerGameOver.h" />
     <ClInclude Include="Layers\LayerGaming.h" />
+    <ClInclude Include="Layers\LayerLogo.h" />
     <ClInclude Include="Layers\LayerMainMenu.h" />
     <ClInclude Include="Layers\LayerOption.h" />
     <ClInclude Include="SceneManager.h" />
@@ -114,6 +116,7 @@
     <ClCompile Include="CocosExt\ADAnimate.cpp" />
     <ClCompile Include="CocosExt\ADParticleSystemCache.cpp" />
     <ClCompile Include="GameObjects\Digger.cpp" />
+    <ClCompile Include="GameObjects\GameDigger.cpp" />
     <ClCompile Include="GameObjects\DiggingPath.cpp" />
     <ClCompile Include="GameObjects\DiggingWorld.cpp" />
     <ClCompile Include="GameObjects\Tiles\BlockTile.cpp" />
@@ -122,6 +125,7 @@
     <ClCompile Include="GameObjects\Tiles\SpawnDiggerTile.cpp" />
     <ClCompile Include="Layers\LayerGameOver.cpp" />
     <ClCompile Include="Layers\LayerGaming.cpp" />
+    <ClCompile Include="Layers\LayerLogo.cpp" />
     <ClCompile Include="Layers\LayerMainMenu.cpp" />
     <ClCompile Include="Layers\LayerOption.cpp" />
     <ClCompile Include="SceneManager.cpp" />

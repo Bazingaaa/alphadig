@@ -12,8 +12,8 @@ class SceneManager
 {
 public:
 
-	///<开始主菜单场景
-	static void startMainMenuScene();
+	///<start the logo scene
+	static void startLogoScene();
 
 	///<覆盖一个新的游戏场景
 	static void replaceGamingScene();

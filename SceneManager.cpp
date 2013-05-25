@@ -1,5 +1,6 @@
 
 #include "SceneManager.h"
+#include "Layers/LayerLogo.h"
 #include "Layers/LayerMainMenu.h"
 #include "Layers/LayerGaming.h"
 #include "Layers/LayerGameOver.h"
@@ -8,17 +9,18 @@
 
 #include "layers_scenes_transitions_nodes/CCScene.h"
 #include "CCDirector.h"
+#include "layers_scenes_transitions_nodes/CCTransition.h"
+#include "include/ccTypes.h"
 
 namespace AlphaDig
 {
 using namespace cocos2d;
 
-
-void SceneManager::startMainMenuScene()
+void SceneManager::startLogoScene()
 {
 	CCScene *pScene = CCScene::create();
 
-	LayerMainMenu *pLayer = new LayerMainMenu();
+	LayerLogo *pLayer = new LayerLogo();
 	pLayer->init();
 	pLayer->initLayer();
 	pLayer->autorelease();
@@ -54,7 +56,7 @@ void SceneManager::replaceMainMenuScene()
 
 	pScene->addChild( pLayer );
 
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create( 1.0f, pScene, ccBLACK ) );
 }
 
 void SceneManager::replaceGameOverScene()

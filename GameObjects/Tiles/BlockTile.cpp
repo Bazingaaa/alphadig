@@ -2,7 +2,6 @@
 
 
 #include "GameObjects/Tiles/BlockTile.h"
-#include "GameObjects/Digger.h"
 #include "GameObjects/DiggingPath.h"
 #include "Script/LuaHelper.h"
 #include "Layers/LayerGaming.h"
@@ -33,10 +32,7 @@ void BlockTile::create( )
 {
 	SoilTile::create();
 
-	m_pSpriteBlock = _createTileSprite( _getTileRectName() );
-	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
-	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
-	pBatchNode->reorderChild( m_pSpriteBlock, m_pSpriteSoil->getZOrder() + 1 );
+	_createBlockSprite();
 }
 
 void BlockTile::destroy()
@@ -56,6 +52,17 @@ bool BlockTile::isTouched( CCTouch *pTouch )
 void BlockTile::touched()
 {
 	input( E_BE_DEGENERATE );
+}
+
+void BlockTile::_createBlockSprite()
+{
+	m_pSpriteBlock = _createTileSprite( _getTileRectName() );
+	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
+	pBatchNode->reorderChild( m_pSpriteBlock, m_pSpriteSoil->getZOrder() + 1 );
+
+	/*ccBlendFunc blendFunc = { GL_ONE, GL_ONE_MINUS_SRC_ALPHA };
+	m_pSpriteBlock->setBlendFunc( blendFunc );*/
 }
 
 const char* BlockTile::_getTileRectName() const
@@ -101,7 +108,7 @@ void BlockTile::_leaveCurrState()
 void BlockTile::_enterNewState()
 {
 	if( m_nCurrentState != E_BS_SOIL )
-		_createTileSprite( _getTileRectName() );
+		_createBlockSprite();
 }
 
 

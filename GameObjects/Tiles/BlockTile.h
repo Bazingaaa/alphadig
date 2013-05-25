@@ -46,6 +46,8 @@ protected:
 	virtual void _leaveCurrState( );
 	virtual void _enterNewState( );
 
+	void _createBlockSprite();
+
 
 protected:
 

@@ -17,7 +17,7 @@ namespace AlphaDig
 
 using namespace cocos2d;
 
-class Digger;
+class GameDigger;
 class SoilTile;
 /**
  * 挖掘道
@@ -57,7 +57,7 @@ public:
 	void notifyRemoveTile( SoilTile *pTile );
 
 	///<get the digger obj
-	Digger* getDigger() const { return m_pDigger; }
+	GameDigger* getDigger() const { return m_pGameDigger; }
 
 	///<respawn the digger
 	void respawnDigger();
@@ -73,7 +73,7 @@ protected:
 protected:
 
 	///<挖掘机对象
-	Digger *m_pDigger;
+	GameDigger *m_pGameDigger;
 
 	///<挖掘的土方
 	typedef std::list< SoilTile* > TileList;
@@ -94,11 +94,8 @@ protected:
 	///<the tile will be delete in next loop
 	TileList m_tilesToBeRemoved;
 
-	///<if the touch began in this path
-	bool m_bTouchBegan;
-
-
-
+	///<if the touch the digger
+	bool m_bDiggerTouched;
 
 };
 
