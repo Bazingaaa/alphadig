@@ -134,13 +134,9 @@ bool GameDigger::isTouched( CCTouch *pTouch )
 	if( isBrokenup() )
 		return false;
 
-	CCRect RECT_DIGGER = LuaHelper::s_getRectVar("RECT_DIGGER_BODY");
-	RECT_DIGGER.origin.x = 0.0f;
-	RECT_DIGGER.origin.y = 0.0f;
-
 	CCPoint touchPoint = m_pDigger->getDiggerMainNode()->convertTouchToNodeSpace( pTouch );
 
-	return RECT_DIGGER.containsPoint( touchPoint );
+	return touchPoint.y > 0.0f;
 }
 
 bool GameDigger::isBrokenup() const

@@ -14,6 +14,8 @@ namespace cocos2d
 {
 	class CCSprite;
 	class CCSpriteBatchNode;
+
+	class CCAction;
 }
 
 namespace AlphaDig
@@ -50,8 +52,9 @@ protected:
 	CCSprite *m_pDiggerGearL;
 	CCSprite *m_pDiggerGearM;
 
-	//the scale of the digger drill to fill the tile width
-	float m_fDrillScale;
+	///<gear rotate actions
+	CCAction *m_pGearRotateL;
+	CCAction *m_pGearRotateM;
 
 };
 
