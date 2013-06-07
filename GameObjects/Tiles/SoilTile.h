@@ -45,25 +45,23 @@ public:
 	virtual void touched(){}
 
 	///<get the top height of this tile
-	float getTopHeight() const { return m_nHeight - 0.5f; }
+	float getInitTopHeight() const{ return m_nHeight - 0.5f; }
+	float getCurrTopHeight() const { return m_nHeight - 0.5f + m_fHeightExtruded; }
 
 protected:
 
 	///<create a tile with a rect name
-	CCSprite* _createTileSprite( const char *pRectName );
-
-	///<destroy sprite
-	void _destroySprite( CCSprite *pSprite );
+	CCSprite* _createTileSprite( const char *pRectName, int nZorder = 0 );
 
 	///< get the tile image rect define name in script
 	virtual const char* _getTileRectName() const ;
+	const char* getTileEdgeName() const { return "RECT_TILE_SOIL_EDGE";}
 
 	///<extrude image when digger dig into this tile
 	virtual void _extrudeImage( float fHeightExtruded );
 	void _extrudeImageImp( float fHeightExtruded, const char *pImageRectName, CCSprite *pSprite );
 
 	bool _isTouchedSprite( CCTouch *pTouch );
-
 
 	///<override from FiniteStateMachine
 	virtual void _processInputEvent( int nEventID ){}
@@ -86,7 +84,11 @@ protected:
 	///<the host digging path
 	DiggingPath *m_pHostPath;
 
+	///<the edge sprite
+	CCSprite *m_pEdgeSprite;
 
+	///<height extruded
+	float m_fHeightExtruded;
 
 	///<the tile height property
 	CC_SYNTHESIZE_READONLY( unsigned int, m_nHeight, Height );

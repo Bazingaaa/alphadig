@@ -10,6 +10,7 @@ namespace cocos2d
 {
 	class CCSet;
 	class CCEvent;
+	class CCSprite;
 }
 
 namespace AlphaDig
@@ -97,6 +98,8 @@ protected:
 	///<if the touch the digger
 	bool m_bDiggerTouched;
 
+	///<the soil top edge
+	CCSprite *m_pTopEdgeSprite;
 };
 
 

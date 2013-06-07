@@ -15,6 +15,8 @@
 #include "touch_dispatcher/CCTouch.h"
 #include "platform/CCCommon.h"
 #include "include/ccMacros.h"
+#include "sprite_nodes/CCSpriteBatchNode.h"
+#include "sprite_nodes/CCSprite.h"
 
 extern "C"
 {
@@ -32,6 +34,7 @@ DiggingPath::DiggingPath( unsigned int nPathColumn)
 , m_nCurrMaxHeightLvl( 0 )
 , m_bPathClosed( false )
 , m_bDiggerTouched( false )
+, m_pTopEdgeSprite( NULL )
 {
 
 }
@@ -45,6 +48,8 @@ DiggingPath::~DiggingPath()
 	}
 
 	m_soilTiles.clear();
+
+
 }
 
 void DiggingPath::create()
@@ -64,6 +69,9 @@ void DiggingPath::create()
 		m_soilTiles.push_back( pTile );
 	}
 
+	//create the top edge sprite
+	CCRect RECT = LuaHelper::s_getRectVar( "RECT_TOP_EDGE" );
+	m_pTopEdgeSprite = DiggingWorld::s_createTileSprite( "RECT_TOP_EDGE", m_nPathColumn, 0, 1.0f, 0.1f, 1 );
 
 	m_nCurrMaxHeightLvl = nTileCountPerColumn;
 
@@ -95,7 +103,7 @@ void DiggingPath::update( float fElapsedTime )
 	//根据挖掘机的高度，销毁土方
 	CCAssert( !m_soilTiles.empty(), "Tiles can't be empty !" );
 	SoilTile *pTopTile = m_soilTiles.front();
-	float fHeightDiff = m_pGameDigger->getHeight() - pTopTile->getTopHeight();
+	float fHeightDiff = m_pGameDigger->getHeight() - pTopTile->getInitTopHeight();
 	if( fHeightDiff > 0.0f )
 		pTopTile->extrude( fHeightDiff );
 
@@ -109,6 +117,12 @@ void DiggingPath::update( float fElapsedTime )
 	for( TileList::iterator iter = m_tilesToBeRemoved.begin(); iter != m_tilesToBeRemoved.end(); ++iter )
 		_removeTile( *iter );
 	m_tilesToBeRemoved.clear();
+
+	//update the top edge position
+	float fDiggerSpriteX = 0.0f;
+	float fDiggerSpriteY = 0.0f;
+	DiggingWorld::sharedDiggingWorld()->convertToGLCoordinate( getGroundHeight(), m_nPathColumn, fDiggerSpriteX, fDiggerSpriteY );
+	m_pTopEdgeSprite->setPositionY( fDiggerSpriteY );
 }
 
 void DiggingPath::touchesBegan( CCSet *pTouches, CCEvent *pEvent )
@@ -156,7 +170,7 @@ float DiggingPath::getGroundHeight( ) const
 	CCAssert( !m_soilTiles.empty(), "Tiles can't be empty !" );
 	SoilTile *pTile = m_soilTiles.front();
 
-	return pTile->getTopHeight();
+	return pTile->getCurrTopHeight();
 }
 
 float DiggingPath::getTopBlockHeight() const
@@ -166,10 +180,10 @@ float DiggingPath::getTopBlockHeight() const
 	{
 		SoilTile *pTile = *iter;
 		if( pTile->getTileType() == "BLOCK" && pTile->getCurrState() != BlockTile::E_BS_SOIL )
-			return pTile->getTopHeight();
+			return pTile->getInitTopHeight();
 	}
 
-	return m_soilTiles.back()->getTopHeight();
+	return m_soilTiles.back()->getInitTopHeight();
 }
 
 void DiggingPath::notifyRemoveTile( SoilTile *pTile )

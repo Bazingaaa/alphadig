@@ -10,6 +10,7 @@ namespace cocos2d
 {
 	class CCSet;
 	class CCEvent;
+	class CCSprite;
 }
 
 namespace AlphaDig
@@ -58,6 +59,12 @@ public:
 
 	///<reset one closed path
 	void resetOneClosedPath( unsigned int nColumn );
+
+	///<create a tile with a rect name
+	static CCSprite* s_createTileSprite( const char *pRectName, unsigned int nColumn, unsigned int nHeight, 
+		float fScaleX = 1.0f, float fScaleY = 1.0f, int nZorder = 1.0f );
+	///<destroy a tile sprite
+	static void s_destroyTileSprite( CCSprite *pSprite );
 
 protected:
 

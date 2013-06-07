@@ -6,6 +6,7 @@
 #include "Script/LuaHelper.h"
 #include "Layers/LayerGaming.h"
 #include "CocosExt/ADParticleSystemCache.h"
+#include "GameObjects/DiggingWorld.h"
 
 #include "touch_dispatcher/CCTouch.h"
 #include "sprite_nodes/CCSpriteBatchNode.h"
@@ -38,7 +39,7 @@ void BlockTile::create( )
 void BlockTile::destroy()
 {
 
-	_destroySprite( m_pSpriteBlock );
+	DiggingWorld::s_destroyTileSprite( m_pSpriteBlock );
 	m_pSpriteBlock = NULL;
 
 	SoilTile::destroy();
@@ -99,7 +100,7 @@ void BlockTile::_leaveCurrState()
 	ADParticleSystemCache::getSingleton().playParticleSystem(
 			LuaHelper::s_getStringVar("PARTS_BLOCK_EXP").c_str(), m_pSpriteBlock->getParent()->convertToWorldSpace( point ) );
 
-	_destroySprite( m_pSpriteBlock );
+	DiggingWorld::s_destroyTileSprite( m_pSpriteBlock );
 	m_pSpriteBlock = NULL;
 
 

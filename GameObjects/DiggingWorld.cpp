@@ -3,6 +3,7 @@
 #include "GameObjects/DiggingPath.h"
 #include "Layers/LayerGaming.h"
 #include "SceneManager.h"
+#include "Script/LuaHelper.h"
 
 #include "platform/CCPlatformMacros.h"
 #include "cocoa/CCSet.h"
@@ -10,6 +11,9 @@
 #include "touch_dispatcher/CCTouch.h"
 #include "sprite_nodes/CCSpriteBatchNode.h"
 #include "platform/CCCommon.h"
+#include "sprite_nodes/CCSpriteBatchNode.h"
+#include "sprite_nodes/CCSprite.h"
+#include "support/CCPointExtension.h"
 
 #include <vector>
 
@@ -126,6 +130,41 @@ void DiggingWorld::resetOneClosedPath( unsigned int nColumn )
 
 	pDiggingPath->respawnDigger();
 }
+
+CCSprite* DiggingWorld::s_createTileSprite( const char *pRectName, unsigned int nColumn, unsigned int nHeight, float fScaleX, float fScaleY, int nZorder )
+{
+	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
+	DiggingWorld *pDiggingWorld = DiggingWorld::sharedDiggingWorld();
+
+	CCSprite *pRetSprite = NULL;
+	CCRect RECT_TILE = LuaHelper::s_getRectVar( pRectName );
+	pRetSprite = CCSprite::createWithTexture( pBatchNode->getTexture(), RECT_TILE );
+	pBatchNode->addChild( pRetSprite, nZorder );
+
+	//¼ÆËãspriteµÄÎ»ÖÃ
+	float fSoilSpriteX = 0.0f;
+	float fSoilSpriteY = 0.0f;
+	pDiggingWorld->convertToGLCoordinate( nHeight, nColumn, fSoilSpriteX, fSoilSpriteY );
+
+	float fTileSize = pDiggingWorld->getTileSize();
+	pRetSprite->setScaleX( fTileSize / RECT_TILE.size.width * fScaleX );
+	pRetSprite->setScaleY( fTileSize / RECT_TILE.size.height * fScaleY );
+
+	pRetSprite->setPosition( ccp( fSoilSpriteX, fSoilSpriteY ) );
+
+	return pRetSprite;
+}
+
+
+void DiggingWorld::s_destroyTileSprite( CCSprite *pSprite )
+{
+	LayerGaming *pLayerGaming = LayerGaming::sharedLayerGaming();
+	CCSpriteBatchNode *pBatchNode = pLayerGaming->getTilesBatchNode();
+
+	pBatchNode->removeChild( pSprite, true );
+}
+
 
 }
 

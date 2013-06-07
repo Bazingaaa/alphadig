@@ -93,9 +93,10 @@ void ADParticleSystemCache::recycle()
 		ParticleSystemList &usedList = iter->second._particleSystems;
 		for( ParticleSystemList::iterator iterList = usedList.begin(); iterList != usedList.end(); )
 		{
-			if( !(*iterList)->isActive() )
+			if( !(*iterList)->isActive() && (*iterList)->getParticleCount() == 0 )
 			{
-				(*iterList)->resetSystem();
+				//(*iterList)->resetSystem();
+				//(*iterList)->stopSystem();
 				m_particleBatchesIdle[iter->first]._particleSystems.push_back( *iterList );
 
 				iterList = usedList.erase( iterList );
@@ -110,6 +111,7 @@ void ADParticleSystemCache::playParticleSystem( const char *pFileName, const CCP
 {
 	CCParticleSystem *pPart = addParticleSystem( pFileName );
 	pPart->setPosition( pos );
+	pPart->resetSystem();
 }
 
 

@@ -4,6 +4,7 @@
 #include "Layers/LayerGaming.h"
 #include "StatisticsManager.h"
 #include "Script/LuaHelper.h"
+#include "GameObjects/DiggingWorld.h"
 
 #include "support/CCPointExtension.h"
 #include "sprite_nodes/CCSpriteBatchNode.h"
@@ -82,7 +83,7 @@ void GoldTile::_processInputEvent( int nEventID )
 
 void GoldTile::_leaveCurrState()
 {
-	_destroySprite( m_pSpriteGold );
+	DiggingWorld::s_destroyTileSprite( m_pSpriteGold );
 	m_pSpriteGold = NULL;
 }
 

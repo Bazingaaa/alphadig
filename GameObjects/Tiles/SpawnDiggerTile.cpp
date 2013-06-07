@@ -79,7 +79,7 @@ void SpawnDiggerTile::_processInputEvent( int nEventID )
 
 void SpawnDiggerTile::_leaveCurrState()
 {
-	_destroySprite( m_pSpriteSpawnDigger );
+	DiggingWorld::s_destroyTileSprite( m_pSpriteSpawnDigger );
 	m_pSpriteSpawnDigger = NULL;
 }
 
